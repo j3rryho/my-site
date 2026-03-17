@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const reviews = await getCollection('reviews');
+reviews.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+<BaseLayout title="Reviews">
+  <h1 class="text-2xl font-bold mb-8">Reviews</h1>
+  {reviews.length === 0 && (
+    <p class="text-gray-400">No reviews yet.</p>
+  )}
+  <ul class="space-y-4">
+    {reviews.map((r) => (
+      <li>
+        <a href={`/reviews/${r.id}`} class="flex justify-between items-start hover:underline">
+          <span>{r.data.title}</span>
+          <span class="text-xs text-gray-400 ml-4 shrink-0">
+            [{r.data.lang.toUpperCase()}] {r.data.category}
+          </span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</BaseLayout>

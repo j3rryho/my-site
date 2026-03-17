@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const reviews = await getCollection('reviews');
+  return reviews.map((r) => ({
+    params: { id: r.id },
+    props: { review: r },
+  }));
+}
+
+const { review } = Astro.props;
+const { Content } = await render(review);
+---
+<BaseLayout title={review.data.title}>
+  <h1 class="text-2xl font-bold mb-2">{review.data.title}</h1>
+  <p class="text-sm text-gray-400 mb-8">
+    {review.data.date.toDateString()} · {review.data.category} · [{review.data.lang.toUpperCase()}]
+    {review.data.rating && ` · ★ ${review.data.rating}`}
+  </p>
+  <article class="prose prose-neutral max-w-none">
+    <Content />
+  </article>
+</BaseLayout>

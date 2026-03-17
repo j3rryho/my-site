@@ -1,0 +1,23 @@
+---
+import '../styles/global.css';
+const { title } = Astro.props;
+---
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title} — Jerry Ho</title>
+  </head>
+  <body class="max-w-2xl mx-auto px-6 py-12 font-sans">
+    <nav class="flex gap-6 mb-16 text-sm">
+      <a href="/" class="hover:underline">Home</a>
+      <a href="/about" class="hover:underline">About</a>
+      <a href="/now" class="hover:underline">Now</a>
+      <a href="/reviews" class="hover:underline">Reviews</a>
+      <a href="/writing" class="hover:underline">Writing</a>
+    </nav>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
