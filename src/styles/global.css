@@ -2,3 +2,34 @@
 @plugin "@tailwindcss/typography";
 
 @variant dark (&:where(.dark, .dark *));
+/* 讓 dark mode 下的內容可讀 */
+main :where(p, li, span, blockquote, small) {
+  color: rgb(24 24 27); /* zinc-900 */
+}
+
+.dark main :where(p, li, span, blockquote, small) {
+  color: rgb(244 244 245); /* zinc-100 */
+}
+
+main a {
+  color: rgb(37 99 235); /* blue-600 */
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.dark main a {
+  color: rgb(147 197 253); /* blue-300 */
+}
+
+/* 程式碼區塊也一起調整 */
+main code {
+  background: rgb(244 244 245);
+  color: rgb(24 24 27);
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.25rem;
+}
+
+.dark main code {
+  background: rgb(39 39 42); /* zinc-800 */
+  color: rgb(228 228 231);  /* zinc-200 */
+}

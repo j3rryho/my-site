@@ -1,39 +1,114 @@
 ---
-import '../styles/global.css';
-import ThemeToggle from '../components/ThemeToggle.astro';
+import "../styles/global.css";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import Footer from "../components/Footer.astro";
 const { title } = Astro.props;
 ---
+
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <title>{title} — Jerry Ho</title>
     <script is:inline>
-  const theme = (() => {
-    if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-      return localStorage.getItem('theme');
-    }
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return 'dark';
-    }
-    return 'light';
-  })();
-
-  document.documentElement.classList.toggle('dark', theme === 'dark');
+      const theme = (() => {
+        if (
+          typeof localStorage !== "undefined" &&
+          localStorage.getItem("theme")
+        ) {
+          return localStorage.getItem("theme");
+        }
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          return "dark";
+        }
+        return "light";
+      })();
+      document.documentElement.classList.toggle("dark", theme === "dark");
     </script>
-
   </head>
-  <body class="max-w-2xl mx-auto px-6 py-12 font-sans bg-white text-black dark:bg-zinc-900 dark:text-white">
-    <nav class="flex gap-6 mb-16 text-sm">
-      <a href="/" class="hover:underline">Home</a>
-      <a href="/about" class="hover:underline">About</a>
-      <a href="/now" class="hover:underline">Now</a>
-      <a href="/reviews" class="hover:underline">Reviews</a>
-      <a href="/writing" class="hover:underline">Writing</a>
-      <ThemeToggle /> 
-    </nav>
-    <main>
-      <slot />
-    </main>
+  <body class="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100 font-sans">
+    <!-- ✅ 用 wrapper div 限制內容寬度 -->
+    <div class="max-w-2xl mx-auto px-6 py-12">
+      <nav class="flex gap-6 mb-16 text-sm">
+        <a href="/" class="hover:underline">Home</a>
+        <a href="/about" class="hover:underline">About</a>
+        <a href="/now" class="hover:underline">Now</a>
+        <a href="/reviews" class="hover:underline">Reviews</a>
+        <a href="/writing" class="hover:underline">Writing</a>
+        <ThemeToggle />
+      </nav>
+      <main>
+        <slot />
+      </main>
+      <Footer />
+    </div>
+
+    <button id="back-to-top" aria-label="Back to top">↑</button>
+
+    <style is:global>
+      #back-to-top {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 9999;
+        width: 2.75rem;
+        height: 2.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 9999px;
+        border: none;
+        font-size: 1.125rem;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        background-color: #e5e7eb;
+        color: #111;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+
+      #back-to-top:hover {
+        background-color: #d1d5db;
+      }
+
+      .dark #back-to-top {
+        background-color: #374151;
+        color: #fff;
+      }
+
+      .dark #back-to-top:hover {
+        background-color: #4b5563;
+      }
+    </style>
+
+    <script is:inline>
+      function initBackToTop() {
+        const btn = document.getElementById("back-to-top");
+        if (!btn || btn.dataset.bound === "true") return;
+        btn.dataset.bound = "true";
+
+        function checkScroll() {
+          if (window.scrollY > 100) {
+            btn.style.opacity = "1";
+            btn.style.pointerEvents = "auto";
+          } else {
+            btn.style.opacity = "0";
+            btn.style.pointerEvents = "none";
+          }
+        }
+
+        window.addEventListener("scroll", checkScroll, { passive: true });
+        btn.addEventListener("click", () => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        // 重要：初始就檢查一次
+        checkScroll();
+      }
+
+      initBackToTop();
+      document.addEventListener("astro:page-load", initBackToTop);
+    </script>
   </body>
 </html>
