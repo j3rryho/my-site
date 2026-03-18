@@ -1,0 +1,21 @@
+<button id="theme-toggle" aria-label="Toggle theme">
+  <span id="theme-icon">🌙</span>
+</button>
+
+<script is:inline>
+  const btn = document.getElementById('theme-toggle');
+  const icon = document.getElementById('theme-icon');
+
+  function updateIcon() {
+    const isDark = document.documentElement.classList.contains('dark');
+    icon.textContent = isDark ? '☀️' : '🌙';
+  }
+
+  updateIcon();
+
+  btn.addEventListener('click', () => {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    updateIcon();
+  });
+</script>
